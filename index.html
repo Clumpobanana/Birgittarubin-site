@@ -40,6 +40,10 @@ header { position: sticky; top: 0; z-index: 5; background: var(--veil); border-b
 .page-title.gallery-title { font: 500 clamp(15px, 1.5vw, 19px)/1.3 var(--name); text-transform: uppercase; letter-spacing: .16em; }
 nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 26px; }
 nav a { text-decoration: none; font-size: 13px; letter-spacing: .09em; text-transform: uppercase; padding-block: 4px; border-bottom: 1px solid transparent; }
+nav ul { align-items: center; }
+nav .ig a { display: inline-flex; align-items: center; padding: 2px 0; border-bottom: 0; color: var(--ink); }
+nav .ig a:hover { color: var(--accent); }
+.contact.contact-only { margin-top: 20px; padding-top: 0; border-top: 0; }
 nav a:hover, nav a[aria-current="page"] { border-bottom-color: var(--accent); }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
@@ -651,6 +655,22 @@ const ABOUT = `
     </div>
   </div>`;
 
+const CONTACT = `
+  <div class="about contact-page">
+    <img src="contact-studio.jpg" alt="Soft fabric sculptures draped over a marble mantelpiece, with green and grey paintings leaning behind them" loading="lazy" style="aspect-ratio:0.956">
+    <div class="text">
+      <h1 class="visually-hidden">Contact</h1>
+      <p>Please get in touch with any questions about the work.</p>
+      <div class="contact contact-only">
+        <a href="mailto:Birgittanorman@gmail.com">Birgittanorman@gmail.com</a>
+        <a href="tel:+16466754790">646-675-4790</a>
+        <a href="https://www.instagram.com/birgitta_rubin_studio/" target="_blank" rel="noopener">Instagram: @birgitta_rubin_studio</a>
+      </div>
+    </div>
+  </div>`;
+
+const INSTAGRAM_ICON = `<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor"/></svg>`;
+
 const $ = (s) => document.querySelector(s);
 const main = $("#main");
 const plural = (n) => n + (n === 1 ? " painting" : " paintings");
@@ -658,7 +678,9 @@ $("#year").textContent = new Date().getFullYear();
 
 $("#menu").innerHTML =
   GALLERIES.map((g) => `<li><a href="#${g.id}" data-route="${g.id}">${g.name}</a></li>`).join("") +
-  `<li><a href="#about" data-route="about">About</a></li>`;
+  `<li><a href="#about" data-route="about">About</a></li>` +
+  `<li><a href="#contact" data-route="contact">Contact</a></li>` +
+  `<li class="ig"><a href="https://www.instagram.com/birgitta_rubin_studio/" target="_blank" rel="noopener" aria-label="Instagram: @birgitta_rubin_studio" title="Instagram">${INSTAGRAM_ICON}</a></li>`;
 
 function home() {
   document.title = "Birgitta Rubin";
@@ -690,6 +712,11 @@ function gallery(g) {
       </figure>`).join("")}</div>`;
 }
 
+function contact() {
+  document.title = "Contact · Birgitta Rubin";
+  main.innerHTML = CONTACT;
+}
+
 function about() {
   document.title = "About · Birgitta Rubin";
   main.innerHTML = ABOUT;
@@ -700,7 +727,7 @@ function route() {
   const id = location.hash.slice(1);
   const g = GALLERIES.find((x) => x.id === id);
   current = g || null;
-  if (g) gallery(g); else if (id === "about") about(); else home();
+  if (g) gallery(g); else if (id === "about") about(); else if (id === "contact") contact(); else home();
   document.querySelectorAll("#menu a").forEach((a) => {
     if (a.dataset.route === id) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
