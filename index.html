@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Birgitta Rubin</title>
+<meta name="description" content="Birgitta Rubin, Swedish-born painter working in Brooklyn, New York.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Hanken+Grotesk:wght@400;500&display=swap">
+<style>
+/* A quiet gallery wall: name and menu across the top, then one gallery at a time,
+   each painting hung at its true proportions. */
+:root {
+  --wall: #f6f6f3;
+  --ink: #1f2124;
+  --muted: #6f7276;
+  --rule: #dcdcd6;
+  --accent: #5c6b4e;   /* muted green from the paintings */
+  --veil: rgba(246,246,243,.97);
+  --display: "Libre Caslon Display", Georgia, "Times New Roman", serif;
+  --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--wall); color: var(--ink); font: 400 16px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+.wrap {
+  max-width: 1320px; margin: 0 auto;
+  padding-left: max(24px, env(safe-area-inset-left, 0px));
+  padding-right: max(24px, env(safe-area-inset-right, 0px));
+}
+
+/* Top bar */
+header { position: sticky; top: 0; z-index: 5; background: var(--veil); border-bottom: 1px solid var(--rule); }
+.bar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 32px; padding-block: 22px 18px; }
+.name { font: 400 clamp(28px, 4vw, 40px)/1 var(--display); text-decoration: none; letter-spacing: -.005em; }
+nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 26px; }
+nav a { text-decoration: none; font-size: 13px; letter-spacing: .09em; text-transform: uppercase; padding-block: 4px; border-bottom: 1px solid transparent; }
+nav a:hover, nav a[aria-current="page"] { border-bottom-color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+main { padding-block: 44px 96px; min-height: 60vh; }
+h1, h2 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; }
+.page-title { font-size: clamp(30px, 4.2vw, 46px); line-height: 1.1; }
+.count { color: var(--muted); font-size: 14px; margin: 6px 0 32px; font-variant-numeric: tabular-nums; }
+
+/* Home: index of galleries */
+.index { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 40px 28px; }
+.index a { text-decoration: none; display: grid; gap: 12px; }
+.cover { aspect-ratio: 4 / 5; max-width: 100%; background: var(--rule); overflow: hidden; display: grid; place-items: center; }
+.cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.index a:hover .cover img { transform: scale(1.025); }
+.cover .soon { color: var(--muted); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
+.index h2 { font-size: 24px; line-height: 1.2; }
+.index .count { margin: 0; }
+
+/* Gallery: rows that keep each painting's proportions */
+.works { display: flex; flex-wrap: wrap; gap: 22px; }
+.works::after { content: ""; flex-grow: 999999; }
+.work { flex-grow: var(--g); flex-basis: calc(var(--ar) * 250px); max-width: calc(var(--ar) * 440px); margin: 0; }
+.work button { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.work img { display: block; width: 100%; height: auto; max-width: 100%; aspect-ratio: var(--ar); object-fit: cover; background: var(--rule); transition: opacity .25s; }
+.work button:hover img { opacity: .9; }
+.empty { color: var(--muted); max-width: 36em; }
+
+/* About */
+.about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 48px; align-items: start; }
+.about img { width: 100%; height: auto; aspect-ratio: 0.627; object-fit: cover; }
+.about .text { min-width: 0; max-width: 34em; }
+.about p { margin: 18px 0 0; }
+.contact { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--rule); display: grid; gap: 6px; }
+.contact .label { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.contact a { text-decoration: none; border-bottom: 1px solid var(--rule); justify-self: start; }
+.contact a:hover { border-bottom-color: var(--accent); }
+
+footer { border-top: 1px solid var(--rule); color: var(--muted); font-size: 13px; }
+footer .wrap { padding-block: 26px 44px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+footer a { text-decoration: none; }
+footer a:hover { color: var(--ink); }
+
+/* Viewer */
+.vcap { text-align: center; padding-top: 14px; min-height: 0; }
+.vcap[hidden] { display: none; }
+.vcap .t { font: 400 20px/1.3 var(--display); }
+.vcap .i { color: var(--muted); font-size: 14px; margin-top: 2px; }
+.viewer.has-cap .stage img { max-height: calc(100vh - 190px); max-height: calc(100dvh - 190px); }
+.viewer { position: fixed; inset: 0; z-index: 20; background: var(--wall); display: grid; grid-template-rows: auto 1fr auto;
+  padding: calc(14px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.viewer[hidden] { display: none; }
+.vbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 13px; }
+.where { color: var(--muted); letter-spacing: .08em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+.stage { position: relative; display: grid; place-items: center; min-height: 0; padding: 12px 56px 0; }
+/* Fit the whole painting inside the window: leave room for the top bar and a margin,
+   never crop, never enlarge past the image's own size. */
+.stage img {
+  display: block; width: auto; height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 120px);
+  max-height: calc(100dvh - 120px);
+  object-fit: contain;
+  box-shadow: 0 14px 44px rgba(31,33,36,.1);
+}
+.vbtn { font: 500 13px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: none; border: 0; padding: 10px 4px; cursor: pointer; }
+.vbtn:hover { color: var(--accent); }
+.arrow { position: absolute; top: 50%; transform: translateY(-50%); font-size: 34px; line-height: 1; padding: 18px 10px; }
+.prev { left: 0; } .next { right: 0; }
+
+@media (max-width: 720px) {
+  .about { grid-template-columns: 1fr; gap: 28px; }
+}
+@media (max-width: 560px) {
+  .bar { padding-block: 16px 12px; }
+  nav ul { gap: 4px 18px; }
+  main { padding-block: 28px 64px; }
+  .work { flex-basis: 100%; max-width: 100%; }
+  .stage { padding-inline: 0; }
+  .arrow { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="name" href="#">Birgitta Rubin</a>
+    <nav aria-label="Main"><ul id="menu"></ul></nav>
+  </div>
+</header>
+
+<main class="wrap" id="main"></main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year"></span> Birgitta Rubin</span>
+    <a href="https://www.instagram.com/birgitta_rubin_studio/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+</footer>
+
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Painting">
+  <div class="vbar">
+    <span class="where" id="vwhere"></span>
+    <button class="vbtn" id="vclose" type="button">Close</button>
+  </div>
+  <div class="stage" id="stage">
+    <button class="vbtn arrow prev" id="vprev" type="button" aria-label="Previous painting">‹</button>
+    <img id="vimg" alt="">
+    <button class="vbtn arrow next" id="vnext" type="button" aria-label="Next painting">›</button>
+  </div>
+  <div class="vcap" id="vcap" hidden></div>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   The galleries. To add a painting, put its image in the images folder
+   and add a line like:  { "src": "images/recent-01.jpg", "ar": 0.75 },
+   "ar" is width divided by height (0.75 = taller than wide).
+------------------------------------------------------------------- */
+const GALLERIES = [
+ {
+  "id": "recent",
+  "name": "Recent work",
+  "works": [
+   {
+    "src": "images/recent-01.jpg",
+    "ar": 0.749,
+    "code": "R1"
+   },
+   {
+    "src": "images/recent-02.jpg",
+    "ar": 1.252,
+    "code": "R2"
+   },
+   {
+    "src": "images/recent-03.jpg",
+    "ar": 1.009,
+    "code": "R3"
+   },
+   {
+    "src": "images/recent-04.jpg",
+    "ar": 0.747,
+    "code": "R4"
+   },
+   {
+    "src": "images/recent-05.jpg",
+    "ar": 0.787,
+    "code": "R5"
+   },
+   {
+    "src": "images/recent-06.jpg",
+    "ar": 0.8,
+    "code": "R6"
+   },
+   {
+    "src": "images/recent-07.jpg",
+    "ar": 0.791,
+    "code": "R7"
+   },
+   {
+    "src": "images/recent-08.jpg",
+    "ar": 0.788,
+    "code": "R8"
+   },
+   {
+    "src": "images/recent-09.jpg",
+    "ar": 0.799,
+    "code": "R9"
+   },
+   {
+    "src": "images/recent-10.jpg",
+    "ar": 0.755,
+    "code": "R10"
+   },
+   {
+    "src": "images/recent-11.jpg",
+    "ar": 1.329,
+    "code": "R11"
+   },
+   {
+    "src": "images/recent-12.jpg",
+    "ar": 0.75,
+    "code": "R12"
+   },
+   {
+    "src": "images/recent-13.jpg",
+    "ar": 1.0,
+    "code": "R13"
+   },
+   {
+    "src": "images/recent-14.jpg",
+    "ar": 0.998,
+    "code": "R14"
+   },
+   {
+    "src": "images/recent-15.jpg",
+    "ar": 0.481,
+    "code": "R15"
+   }
+  ]
+ },
+ {
+  "id": "nature",
+  "name": "Nature",
+  "works": [
+   {
+    "src": "images/nature-22.jpg",
+    "ar": 0.753,
+    "code": "N22"
+   },
+   {
+    "src": "images/nature-23.jpg",
+    "ar": 0.759,
+    "code": "N23"
+   },
+   {
+    "src": "images/nature-24.jpg",
+    "ar": 0.759,
+    "code": "N24"
+   },
+   {
+    "src": "images/nature-25.jpg",
+    "ar": 0.73,
+    "code": "N25"
+   },
+   {
+    "src": "images/nature-26.jpg",
+    "ar": 0.73,
+    "code": "N26"
+   },
+   {
+    "src": "images/nature-27.jpg",
+    "ar": 0.736,
+    "code": "N27"
+   },
+   {
+    "src": "images/nature-28.jpg",
+    "ar": 0.693,
+    "code": "N28"
+   },
+   {
+    "src": "images/nature-29.jpg",
+    "ar": 0.703,
+    "code": "N29"
+   },
+   {
+    "src": "images/nature-30.jpg",
+    "ar": 0.679,
+    "code": "N30"
+   },
+   {
+    "src": "images/nature-31.jpg",
+    "ar": 0.687,
+    "code": "N31"
+   },
+   {
+    "src": "images/nature-32.jpg",
+    "ar": 0.755,
+    "code": "N32"
+   },
+   {
+    "src": "images/nature-33.jpg",
+    "ar": 0.689,
+    "code": "N33"
+   },
+   {
+    "src": "images/nature-34.jpg",
+    "ar": 0.607,
+    "code": "N34"
+   },
+   {
+    "src": "images/nature-35.jpg",
+    "ar": 0.634,
+    "code": "N35"
+   },
+   {
+    "src": "images/nature-36.jpg",
+    "ar": 0.665,
+    "code": "N36"
+   },
+   {
+    "src": "images/nature-01.jpg",
+    "ar": 0.679,
+    "code": "N1"
+   },
+   {
+    "src": "images/nature-02.jpg",
+    "ar": 0.685,
+    "code": "N2"
+   },
+   {
+    "src": "images/nature-03.jpg",
+    "ar": 0.677,
+    "code": "N3"
+   },
+   {
+    "src": "images/nature-04.jpg",
+    "ar": 0.65,
+    "code": "N4"
+   },
+   {
+    "src": "images/nature-05.jpg",
+    "ar": 0.703,
+    "code": "N5"
+   },
+   {
+    "src": "images/nature-06.jpg",
+    "ar": 1.335,
+    "code": "N6"
+   },
+   {
+    "src": "images/nature-07.jpg",
+    "ar": 1.333,
+    "code": "N7"
+   },
+   {
+    "src": "images/nature-08.jpg",
+    "ar": 1.47,
+    "code": "N8"
+   },
+   {
+    "src": "images/nature-09.jpg",
+    "ar": 1.613,
+    "code": "N9"
+   },
+   {
+    "src": "images/nature-10.jpg",
+    "ar": 0.74,
+    "code": "N10"
+   },
+   {
+    "src": "images/nature-11.jpg",
+    "ar": 0.732,
+    "code": "N11"
+   },
+   {
+    "src": "images/nature-12.jpg",
+    "ar": 0.744,
+    "code": "N12"
+   },
+   {
+    "src": "images/nature-13.jpg",
+    "ar": 1.335,
+    "code": "N13"
+   },
+   {
+    "src": "images/nature-14.jpg",
+    "ar": 1.362,
+    "code": "N14"
+   },
+   {
+    "src": "images/nature-15.jpg",
+    "ar": 0.776,
+    "code": "N15"
+   },
+   {
+    "src": "images/nature-16.jpg",
+    "ar": 1.319,
+    "code": "N16"
+   },
+   {
+    "src": "images/nature-17.jpg",
+    "ar": 0.773,
+    "code": "N17"
+   },
+   {
+    "src": "images/nature-18.jpg",
+    "ar": 0.695,
+    "code": "N18"
+   },
+   {
+    "src": "images/nature-19.jpg",
+    "ar": 0.734,
+    "code": "N19"
+   },
+   {
+    "src": "images/nature-20.jpg",
+    "ar": 0.724,
+    "code": "N20"
+   },
+   {
+    "src": "images/nature-21.jpg",
+    "ar": 1.642,
+    "code": "N21"
+   }
+  ]
+ },
+ {
+  "id": "figurative",
+  "name": "Figurative",
+  "works": [
+   {
+    "src": "images/figurative-01.jpg",
+    "ar": 0.636,
+    "code": "F1"
+   },
+   {
+    "src": "images/figurative-02.jpg",
+    "ar": 0.775,
+    "code": "F2"
+   },
+   {
+    "src": "images/figurative-03.jpg",
+    "ar": 0.779,
+    "code": "F3"
+   },
+   {
+    "src": "images/figurative-04.jpg",
+    "ar": 0.684,
+    "code": "F4"
+   },
+   {
+    "src": "images/figurative-05.jpg",
+    "ar": 0.611,
+    "code": "F5"
+   },
+   {
+    "src": "images/figurative-06.jpg",
+    "ar": 0.714,
+    "code": "F6"
+   },
+   {
+    "src": "images/figurative-07.jpg",
+    "ar": 0.689,
+    "code": "F7"
+   },
+   {
+    "src": "images/figurative-08.jpg",
+    "ar": 0.722,
+    "code": "F8"
+   },
+   {
+    "src": "images/figurative-09.jpg",
+    "ar": 0.734,
+    "code": "F9"
+   },
+   {
+    "src": "images/figurative-10.jpg",
+    "ar": 1.319,
+    "code": "F10"
+   },
+   {
+    "src": "images/figurative-11.jpg",
+    "ar": 0.734,
+    "code": "F11"
+   },
+   {
+    "src": "images/figurative-12.jpg",
+    "ar": 0.712,
+    "code": "F12"
+   },
+   {
+    "src": "images/figurative-13.jpg",
+    "ar": 0.751,
+    "code": "F13"
+   },
+   {
+    "src": "images/figurative-14.jpg",
+    "ar": 0.675,
+    "code": "F14"
+   },
+   {
+    "src": "images/figurative-15.jpg",
+    "ar": 0.75,
+    "code": "F15"
+   },
+   {
+    "src": "images/figurative-16.jpg",
+    "ar": 0.75,
+    "code": "F16"
+   },
+   {
+    "src": "images/figurative-17.jpg",
+    "ar": 0.648,
+    "code": "F17"
+   },
+   {
+    "src": "images/figurative-18.jpg",
+    "ar": 0.671,
+    "code": "F18"
+   },
+   {
+    "src": "images/figurative-19.jpg",
+    "ar": 1.495,
+    "code": "F19"
+   },
+   {
+    "src": "images/figurative-20.jpg",
+    "ar": 1.65,
+    "code": "F20"
+   },
+   {
+    "src": "images/figurative-21.jpg",
+    "ar": 0.738,
+    "code": "F21"
+   },
+   {
+    "src": "images/figurative-22.jpg",
+    "ar": 0.679,
+    "code": "F22"
+   },
+   {
+    "src": "images/figurative-23.jpg",
+    "ar": 0.593,
+    "code": "F23"
+   },
+   {
+    "src": "images/figurative-24.jpg",
+    "ar": 0.697,
+    "code": "F24"
+   },
+   {
+    "src": "images/figurative-25.jpg",
+    "ar": 1.718,
+    "code": "F25"
+   },
+   {
+    "src": "images/figurative-26.jpg",
+    "ar": 1.014,
+    "code": "F26"
+   },
+   {
+    "src": "images/figurative-27.jpg",
+    "ar": 0.661,
+    "code": "F27"
+   }
+  ]
+ },
+ {
+  "id": "portraits",
+  "name": "Portraits",
+  "works": [
+   {
+    "src": "images/portraits-01.jpg",
+    "ar": 1.0,
+    "code": "P1"
+   },
+   {
+    "src": "images/portraits-02.jpg",
+    "ar": 1.0,
+    "code": "P2"
+   },
+   {
+    "src": "images/portraits-03.jpg",
+    "ar": 0.816,
+    "code": "P3"
+   },
+   {
+    "src": "images/portraits-04.jpg",
+    "ar": 0.763,
+    "code": "P4"
+   },
+   {
+    "src": "images/portraits-05.jpg",
+    "ar": 0.744,
+    "code": "P5"
+   },
+   {
+    "src": "images/portraits-07.jpg",
+    "ar": 0.714,
+    "code": "P7"
+   },
+   {
+    "src": "images/portraits-08.jpg",
+    "ar": 0.705,
+    "code": "P8"
+   },
+   {
+    "src": "images/portraits-09.jpg",
+    "ar": 0.789,
+    "code": "P9"
+   },
+   {
+    "src": "images/portraits-10.jpg",
+    "ar": 0.736,
+    "code": "P10"
+   },
+   {
+    "src": "images/portraits-11.jpg",
+    "ar": 0.73,
+    "code": "P11"
+   },
+   {
+    "src": "images/portraits-06.jpg",
+    "ar": 0.75,
+    "code": "P6"
+   }
+  ]
+ }
+];
+
+const ABOUT = `
+  <div class="about">
+    <img src="images/about-birgitta.jpg" alt="Birgitta Rubin on a beach under a wide sky" loading="lazy">
+    <div class="text">
+      <h1 class="page-title">About</h1>
+      <p>Birgitta Rubin is a Swedish-born visual artist working in Brooklyn, NY. She received a B.A. from St. Lawrence University and later studied painting at the Art Students League in New York and Gerlesborgskolan in Stockholm, Sweden.</p>
+      <p>She has had a solo show at Sweet Lorraine Gallery in Brooklyn and has participated in group shows at 440 Gallery and Sweet Lorraine Gallery. Her work is in private collections in Sweden and in the United States.</p>
+      <div class="contact">
+        <div class="label">Contact</div>
+        <span>Please get in touch with any questions about the work.</span>
+        <a href="mailto:Birgittanorman@gmail.com">Birgittanorman@gmail.com</a>
+        <a href="tel:+16466754790">646-675-4790</a>
+        <a href="https://www.instagram.com/birgitta_rubin_studio/" target="_blank" rel="noopener">Instagram: @birgitta_rubin_studio</a>
+      </div>
+    </div>
+  </div>`;
+
+const $ = (s) => document.querySelector(s);
+const main = $("#main");
+const plural = (n) => n + (n === 1 ? " painting" : " paintings");
+$("#year").textContent = new Date().getFullYear();
+
+$("#menu").innerHTML =
+  GALLERIES.map((g) => `<li><a href="#${g.id}" data-route="${g.id}">${g.name}</a></li>`).join("") +
+  `<li><a href="#about" data-route="about">About</a></li>`;
+
+function home() {
+  document.title = "Birgitta Rubin";
+  main.innerHTML = `<h1 class="page-title" style="position:absolute;left:-9999px">Galleries</h1>
+    <div class="index">${GALLERIES.filter((g) => g.works.length).map((g) => {
+      const c = g.works[0];
+      const cover = c
+        ? `<img src="${c.src}" alt="" loading="lazy">`
+        : `<span class="soon">New work coming soon</span>`;
+      return `<a href="#${g.id}"><div class="cover">${cover}</div>
+        <div><h2>${g.name}</h2><p class="count">${g.works.length ? plural(g.works.length) : "Coming soon"}</p></div></a>`;
+    }).join("")}</div>`;
+}
+
+function gallery(g) {
+  document.title = g.name + " · Birgitta Rubin";
+  if (!g.works.length) {
+    main.innerHTML = `<h1 class="page-title">${g.name}</h1>
+      <p class="count">Coming soon</p><p class="empty">New paintings will be shown here shortly.</p>`;
+    return;
+  }
+  main.innerHTML = `<h1 class="page-title">${g.name}</h1>
+    <p class="count">${plural(g.works.length)}</p>
+    <div class="works">${g.works.map((w, i) => `
+      <figure class="work" style="--ar:${w.ar};--g:${Math.round(w.ar * 100)}">
+        <button type="button" data-i="${i}" aria-label="View painting ${i + 1} of ${g.works.length}">
+          <img src="${w.src}" alt="${g.name}, painting ${i + 1}" loading="${i < 8 ? "eager" : "lazy"}">
+        </button>
+      </figure>`).join("")}</div>`;
+}
+
+function about() {
+  document.title = "About · Birgitta Rubin";
+  main.innerHTML = ABOUT;
+}
+
+let current = null;
+function route() {
+  const id = location.hash.slice(1);
+  const g = GALLERIES.find((x) => x.id === id);
+  current = g || null;
+  if (g) gallery(g); else if (id === "about") about(); else home();
+  document.querySelectorAll("#menu a").forEach((a) => {
+    if (a.dataset.route === id) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
+  });
+  closeViewer(true);
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+
+// Viewer
+const viewer = $("#viewer");
+let idx = 0, lastFocus = null;
+function show() {
+  const w = current.works[idx];
+  $("#vimg").src = w.src;
+  $("#vimg").alt = w.title || `${current.name}, painting ${idx + 1}`;
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const hasCap = !!(w.title || w.info);
+  $("#vcap").hidden = !hasCap;
+  $("#vcap").innerHTML = hasCap
+    ? (w.title ? `<div class="t">${esc(w.title)}</div>` : "") + (w.info ? `<div class="i">${esc(w.info)}</div>` : "")
+    : "";
+  viewer.classList.toggle("has-cap", hasCap);
+  $("#vwhere").textContent = `${current.name} · ${idx + 1} / ${current.works.length}`;
+}
+function openViewer(i) {
+  lastFocus = document.activeElement;
+  idx = i; show();
+  viewer.hidden = false;
+  document.body.style.overflow = "hidden";
+  $("#vclose").focus();
+}
+function closeViewer(quiet) {
+  if (viewer.hidden) return;
+  viewer.hidden = true;
+  document.body.style.overflow = "";
+  if (!quiet && lastFocus) lastFocus.focus();
+}
+function step(d) { const n = current.works.length; idx = (idx + d + n) % n; show(); }
+main.addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-i]");
+  if (b && current) openViewer(+b.dataset.i);
+});
+$("#vclose").onclick = () => closeViewer();
+$("#vprev").onclick = () => step(-1);
+$("#vnext").onclick = () => step(1);
+$("#stage").addEventListener("click", (e) => { if (e.target.id === "stage") closeViewer(); });
+document.addEventListener("keydown", (e) => {
+  if (viewer.hidden) return;
+  if (e.key === "Escape") closeViewer();
+  if (e.key === "ArrowLeft") step(-1);
+  if (e.key === "ArrowRight") step(1);
+});
+let x0 = null;
+viewer.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+viewer.addEventListener("touchend", (e) => {
+  if (x0 === null) return;
+  const dx = e.changedTouches[0].clientX - x0;
+  if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+  x0 = null;
+});
+
+route();
+</script>
+</body>
+</html>
