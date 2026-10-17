@@ -72,6 +72,8 @@ h1, h2 { font-family: var(--display); font-weight: 400; text-wrap: balance; marg
 .about img { width: 100%; height: auto; aspect-ratio: 0.627; object-fit: cover; }
 .about .text { min-width: 0; max-width: 34em; }
 .about p { margin: 18px 0 0; }
+.about .text p:first-of-type { margin-top: 0; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .contact { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--rule); display: grid; gap: 6px; }
 .contact .label { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
 .contact a { text-decoration: none; border-bottom: 1px solid var(--rule); justify-self: start; }
@@ -636,7 +638,7 @@ const ABOUT = `
   <div class="about">
     <img src="about-birgitta.jpg" alt="Birgitta Rubin on a beach under a wide sky" loading="lazy">
     <div class="text">
-      <h1 class="page-title gallery-title">About</h1>
+      <h1 class="visually-hidden">About</h1>
       <p>Birgitta Rubin is a Swedish-born visual artist working in Brooklyn, NY. She received a B.A. from St. Lawrence University and later studied painting at the Art Students League in New York and Gerlesborgskolan in Stockholm, Sweden.</p>
       <p>She has had a solo show at Sweet Lorraine Gallery in Brooklyn and has participated in group shows at 440 Gallery and Sweet Lorraine Gallery. Her work is in private collections in Sweden and in the United States.</p>
       <div class="contact">
