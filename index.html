@@ -7,7 +7,7 @@
 <meta name="description" content="Birgitta Rubin, Swedish-born painter working in Brooklyn, New York.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Hanken+Grotesk:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Hanken+Grotesk:wght@400;500&family=Montserrat:wght@500&display=swap">
 <style>
 /* A quiet gallery wall: name and menu across the top, then one gallery at a time,
    each painting hung at its true proportions. */
@@ -20,6 +20,7 @@
   --veil: rgba(246,246,243,.97);
   --display: "Libre Caslon Display", Georgia, "Times New Roman", serif;
   --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --name: "Montserrat", "Helvetica Neue", Arial, sans-serif;
   color-scheme: light;
 }
 * { box-sizing: border-box; }
@@ -34,7 +35,9 @@ a { color: inherit; }
 /* Top bar */
 header { position: sticky; top: 0; z-index: 5; background: var(--veil); border-bottom: 1px solid var(--rule); }
 .bar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 32px; padding-block: 22px 18px; }
-.name { font: 400 clamp(28px, 4vw, 40px)/1 var(--display); text-decoration: none; letter-spacing: -.005em; }
+.name { font: 500 clamp(24px, 3.9vw, 50px)/1 var(--name); text-transform: uppercase; letter-spacing: .12em; text-decoration: none; }
+/* Gallery pages: title in the same face as the name, for contrast with the serif elsewhere */
+.gallery-title { font: 500 clamp(22px, 2.6vw, 32px)/1.15 var(--name); text-transform: uppercase; letter-spacing: .12em; }
 nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 26px; }
 nav a { text-decoration: none; font-size: 13px; letter-spacing: .09em; text-transform: uppercase; padding-block: 4px; border-bottom: 1px solid transparent; }
 nav a:hover, nav a[aria-current="page"] { border-bottom-color: var(--accent); }
@@ -153,8 +156,8 @@ footer a:hover { color: var(--ink); }
 
 <script>
 /* ------------------------------------------------------------------
-   The galleries. To add a painting, upload its image next to index.html
-   and add a line like:  { "src": "recent-16.jpg", "ar": 0.75 },
+   The galleries. To add a painting, put its image in the images folder
+   and add a line like:  { "src": "recent-01.jpg", "ar": 0.75 },
    "ar" is width divided by height (0.75 = taller than wide).
 ------------------------------------------------------------------- */
 const GALLERIES = [
@@ -633,7 +636,7 @@ const ABOUT = `
   <div class="about">
     <img src="about-birgitta.jpg" alt="Birgitta Rubin on a beach under a wide sky" loading="lazy">
     <div class="text">
-      <h1 class="page-title">About</h1>
+      <h1 class="page-title gallery-title">About</h1>
       <p>Birgitta Rubin is a Swedish-born visual artist working in Brooklyn, NY. She received a B.A. from St. Lawrence University and later studied painting at the Art Students League in New York and Gerlesborgskolan in Stockholm, Sweden.</p>
       <p>She has had a solo show at Sweet Lorraine Gallery in Brooklyn and has participated in group shows at 440 Gallery and Sweet Lorraine Gallery. Her work is in private collections in Sweden and in the United States.</p>
       <div class="contact">
@@ -671,11 +674,11 @@ function home() {
 function gallery(g) {
   document.title = g.name + " · Birgitta Rubin";
   if (!g.works.length) {
-    main.innerHTML = `<h1 class="page-title">${g.name}</h1>
+    main.innerHTML = `<h1 class="page-title gallery-title">${g.name}</h1>
       <p class="count">Coming soon</p><p class="empty">New paintings will be shown here shortly.</p>`;
     return;
   }
-  main.innerHTML = `<h1 class="page-title">${g.name}</h1>
+  main.innerHTML = `<h1 class="page-title gallery-title">${g.name}</h1>
     <p class="count">${plural(g.works.length)}</p>
     <div class="works">${g.works.map((w, i) => `
       <figure class="work" style="--ar:${w.ar};--g:${Math.round(w.ar * 100)}">
